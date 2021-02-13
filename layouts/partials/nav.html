@@ -1,0 +1,64 @@
+<!-- Nav -->
+{{ $data := index .Site.Data .Site.Language.Lang }}
+{{ $currentPage := . }}
+<nav id="nav">
+    <ul class="links">
+        {{ if .IsTranslated }}
+        {{ range .AllTranslations }}
+        <li {{if eq ($.Site.Language) (.Language)}}class="active"{{end}}><a href='{{ .Permalink }}'>{{ .Language.LanguageName }}</a></li>
+        {{ end }}
+        {{ end }}
+        {{ range .Site.Menus.main }}
+			{{ if .HasChildren }}
+				<ul class="sidebar-nav">
+					{{ range .Children }}
+					<li>
+						<a href="{{ .URL }}" {{ if $currentPage.IsMenuCurrent "main" . }}class="active"{{ end }} rel="noopener noreferrer">{{ .Name | markdownify }}</a>
+					</li>
+					{{ end }}
+				</ul>
+			{{ else }} <!-- No children -->
+				<li {{ if $currentPage.IsMenuCurrent "main" . }}class="active"{{ end }}>
+					<a href="{{.URL}}" rel="noopener noreferrer">{{ .Pre }}
+						<span>{{ .Name | markdownify }}</span>
+					</a>
+				</li>
+			{{ end }}
+		{{ end }}
+    </ul>
+    
+    <ul class="icons">
+        {{ with $data.social }}
+        {{ with .twitter }}
+        <li><a href="{{ . }}" class="icon fa-twitter"><span class="label">Twitter</span></a></li>
+        {{ end }}
+        {{ with .facebook }}
+        <li><a href="{{ . }}" class="icon fa-facebook"><span class="label">Facebook</span></a></li>
+        {{ end }}
+        {{ with .instagram }}
+        <li><a href="{{ . }}" class="icon fa-instagram"><span class="label">Instagram</span></a></li>
+        {{ end }}
+        {{ with .linkedin }}
+        <li><a href="{{ . }}" class="icon fa-linkedin"><span class="label">LinkedIn</span></a></li>
+        {{ end }}
+        {{ with .github }}
+        <li><a href="{{ . }}" class="icon fa-github"><span class="label">GitHub</span></a></li>
+        {{ end }}
+        {{ with .youtube }}
+        <li><a href="{{ . }}" class="icon fa-youtube"><span class="label">Youtube</span></a></li>
+        {{ end }}
+        {{ with .googleplus }}
+        <li><a href="{{ . }}" class="icon fa-google-plus"><span class="label">Google Plus</span></a></li>
+        {{ end }}
+        {{ with .lastfm }}
+        <li><a href="{{ . }}" class="icon fa-lastfm"><span class="label">Last.fm</span></a></li>
+        {{ end }}
+        {{ with .flickr }}
+        <li><a href="{{ . }}" class="icon fa-flickr"><span class="label">Flickr</span></a></li>
+        {{ end }}
+        {{ end }}
+    </ul>
+    <ul>
+        <span style='font-family: "Source Sans Pro", Helvetica, sans-serif;'><a href="https://cooper.edu" rel="noopener noreferrer"><i class="icon fa-map-marker" aria-hidden="true"></i> The Cooper Union <i class="icon fa-graduation-cap" aria-hidden="true"></i> , NYC</a></span>
+    </ul>
+</nav>

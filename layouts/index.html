@@ -1,0 +1,85 @@
+{{ partial "htmlhead" . }}
+	<body lang='{{ .Site.Language.Lang | default "en-us" }}' class="is-preload">
+		{{ $postsFoldername := .Site.Params.Posts.foldername | default "blog" }}
+		{{ $postsPageSize := .Site.Params.Posts.pagesize | default 2 }}
+
+		{{ .Scratch.Set "postsFeaturedPostEnabled" true }}
+		{{ if (or (eq .Site.Params.Posts.featuredpost "false") (eq .Site.Params.Posts.featuredpost false)) }}
+			{{ .Scratch.Set "postsFeaturedPostEnabled" false }}
+		{{ end }}
+		{{ $postsFeaturedPostEnabled := .Scratch.Get "postsFeaturedPostEnabled" }}
+
+		{{ $posts := where .Site.RegularPages "Type" $postsFoldername }}
+
+		{{ $firstPost := first 1 $posts }}
+
+		{{ if and (eq $postsFeaturedPostEnabled true) (gt (len $posts) 1) }}
+			{{ .Scratch.Set "postsForPaging" (after 1 $posts) }}
+		{{ else }}
+			{{ .Scratch.Set "postsForPaging" $posts }}
+		{{ end }}
+		{{ $postsForPaging := .Scratch.Get "postsForPaging" }}
+
+		{{ $postsPaging := .Paginate $postsForPaging $postsPageSize }}
+
+		<!-- Wrapper -->
+			<div id="wrapper" class="fade-in" data-pfn="{{ $postsFoldername }}" data-ps="{{ $postsPageSize }}" data-pfp="{{ $postsFeaturedPostEnabled }}">
+
+				{{ if eq $postsPaging.PageNumber 1 }}
+				{{ partial "intro.html" . }}
+				{{ end }}
+
+				{{ partial "header" . }}
+				{{ partial "nav" . }}
+
+				<!-- Main -->
+					<div id="main">
+						
+						<article class="index-article">
+						{{ if .Content }}
+							{{ .Content }}
+						{{ end }}
+						</article>
+
+						<header class="major"><a href="/blog/"><img src="/icons/note.svg" style="height: 100px;"><h2>News</h2></a></header>
+
+						{{ if (eq $postsFeaturedPostEnabled true) }}
+						{{ partial "posts/featured.html" (dict "firstpost" $firstPost "siteData" (index .Site.Data .Site.Language.Lang)) }}
+						{{ end }}
+
+						{{ if (not (and (eq (len $posts) 1) (eq $postsFeaturedPostEnabled true))) }}
+							{{ partial "posts/list.html" (dict "posts" $postsPaging "siteData" (index .Site.Data .Site.Language.Lang)) }}
+						{{ end }}
+
+						{{ if gt .Paginator.TotalPages 1 }}
+							<footer>
+								<div class="pagination">
+									<ul class="pagination">
+										<li>
+											<a href="/blog/" class="next">
+												Show more news
+											</a>
+										</li>
+									</ul>
+								</div>
+							</footer>
+						{{ end }}
+
+						<header class="major"><a href="/members/"><img src="/icons/members.svg" style="height: 100px;"><h2>Members</h2></a></header>
+
+						{{ $members := index (where .Site.Sections "Title" "Members") 0 }}
+						{{ partial "posts/memberslist.html" (dict "posts" $members "siteData" (index .Site.Data .Site.Language.Lang) "featuredOnly" true) }}
+
+					</div>
+
+					{{ partial "footer/index" . }}
+					{{ partial "copyright" . }}
+
+					<a href="#navPanel" id="navPanelToggle">{{ i18n "NAV_MENU" . }}</a>
+			</div>
+
+			{{ template "_internal/google_analytics.html" . }}
+			{{ partial "scripts/index" . }}
+
+	</body>
+</html>

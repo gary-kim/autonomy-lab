@@ -1,0 +1,10 @@
+<!-- Posts -->
+{{ $data := .siteData }}
+{{ $featuredOnly := .featuredOnly | default false }}
+<section class="posts members">
+    {{ range .posts.Pages }}
+        {{ if or (not $featuredOnly) .Params.featured }}
+            {{ partial "posts/singlemember.html" (dict "post" . "siteData" $data) }}
+        {{ end }}
+    {{ end }}
+</section>

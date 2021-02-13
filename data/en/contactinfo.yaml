@@ -1,0 +1,9 @@
+contactformaction: 'post-action'
+
+address:
+- line: '41 Cooper Square'
+- line: 'New York, NY 10003'
+
+phone: '(800) 000-0000'
+
+email: 'someone@cooper.edu'

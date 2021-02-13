@@ -1,0 +1,21 @@
+baseURL = "https://ee.cooper.edu/~gary.kim/autonomylab"
+languageCode = "en-us"
+title = "Autonomy Lab"
+theme = "massively"
+
+disableKinds = ["taxonomy", "taxonomyTerm"]
+canonifyurls = true
+
+copyright="All work is done with consideration of its effects on the environment.<br>Autonomy Lab, 2020."
+
+[languages]
+[languages.en]
+  languageName = "English"
+
+[params]
+[params.posts]
+featuredpost = false
+foldername = "blog"
+
+[markup.goldmark.renderer]
+unsafe = true
